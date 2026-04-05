@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import requests
+import json
 
 app = Flask(__name__)
 
@@ -13,16 +14,14 @@ def fetch_status():
     if not uid:
         return jsonify({"error": "UID required"}), 400
     
-    # Timro API Link
     api_url = f"https://player-status-ff-gf.onrender.com/s?uid={uid}"
     
     try:
-        # API bata data tanne
         response = requests.get(api_url, timeout=10)
-        # API le text response dincha bhane teslai logically pathaune
+        # Hami backend batai clean garera pathauchau
         return jsonify({"success": True, "data": response.text})
     except Exception as e:
-        return jsonify({"success": False, "error": "Connection Timeout"}), 500
+        return jsonify({"success": False, "error": "Server Timeout"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
